@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Octet32 — All IP Address Blocks Under Management</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0a1628;--deep:#0d1f3c;--teal:#0e7c7b;--teal-lt:#13a8a7;--orange:#e07b39;--white:#f0f4f8;--muted:#8a9ab5;--border:rgba(14,124,123,0.25);--card:rgba(13,31,60,0.7)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.7;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(14,124,123,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(14,124,123,0.04) 1px,transparent 1px);background-size:48px 48px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(10,22,40,0.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:.75rem;text-decoration:none}
+.nav-logo svg{width:38px;height:38px}
+.nav-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:1.35rem;color:var(--white);letter-spacing:-.02em}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-family:'DM Mono',monospace;font-size:.78rem;color:var(--muted);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;transition:color .2s}
+.nav-links a:hover{color:var(--teal-lt)}
+.nav-cta{font-family:'DM Mono',monospace;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;padding:.55rem 1.4rem;border:1px solid var(--teal);color:var(--teal-lt);text-decoration:none;transition:all .2s}
+.nav-cta:hover{background:var(--teal);color:var(--white)}
+#hero{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:8rem 4rem 4rem;overflow:hidden}
+.hc{position:absolute;border-radius:50%;pointer-events:none}
+.hc1{width:700px;height:700px;right:-200px;top:-150px;background:radial-gradient(circle,rgba(14,124,123,.12) 0%,transparent 70%)}
+.hc2{width:400px;height:400px;right:200px;top:100px;background:radial-gradient(circle,rgba(224,123,57,.08) 0%,transparent 70%)}
+.eyebrow{font-family:'DM Mono',monospace;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--teal-lt);margin-bottom:1.5rem;opacity:0;animation:fadeUp .8s .1s forwards}
+h1.headline{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(3rem,6vw,5.5rem);line-height:1;letter-spacing:-.03em;max-width:800px;opacity:0;animation:fadeUp .8s .25s forwards}
+.accent{color:var(--teal-lt)}.accent-o{color:var(--orange)}
+.hero-sub{margin-top:1.8rem;font-size:1.1rem;color:var(--muted);max-width:560px;line-height:1.7;opacity:0;animation:fadeUp .8s .4s forwards}
+.hero-actions{display:flex;gap:1rem;margin-top:2.5rem;opacity:0;animation:fadeUp .8s .55s forwards}
+.btn-p{font-family:'DM Mono',monospace;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;padding:.85rem 2rem;background:var(--teal);color:var(--white);text-decoration:none;border:1px solid var(--teal);transition:all .2s}
+.btn-p:hover{background:var(--teal-lt);border-color:var(--teal-lt)}
+.btn-s{font-family:'DM Mono',monospace;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;padding:.85rem 2rem;background:transparent;color:var(--muted);text-decoration:none;border:1px solid rgba(138,154,181,.3);transition:all .2s}
+.btn-s:hover{color:var(--white);border-color:var(--white)}
+.hero-stats{display:flex;gap:3rem;margin-top:5rem;opacity:0;animation:fadeUp .8s .7s forwards}
+.stat{border-left:2px solid var(--teal);padding-left:1rem}
+.stat-n{font-family:'Syne',sans-serif;font-weight:700;font-size:2rem;color:var(--white);line-height:1}
+.stat-l{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:.3rem}
+section{position:relative;z-index:1;padding:6rem 4rem}
+.slabel{font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--teal-lt);margin-bottom:1rem}
+.stitle{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(2rem,3.5vw,2.8rem);letter-spacing:-.02em;line-height:1.15;margin-bottom:1.5rem}
+.sbody{color:var(--muted);font-size:1.05rem;max-width:600px;line-height:1.8}
+.ldiv{width:60px;height:2px;background:var(--teal);margin:1.2rem 0 2rem}
+#problem{background:linear-gradient(180deg,var(--navy) 0%,var(--deep) 100%);border-top:1px solid var(--border)}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:3rem;max-width:1100px}
+.pcard{background:var(--card);border:1px solid var(--border);padding:2rem;transition:border-color .2s,transform .2s}
+.pcard:hover{border-color:var(--teal);transform:translateY(-2px)}
+.picon{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.15em;color:var(--orange);text-transform:uppercase;margin-bottom:.75rem}
+.pcard h3{font-family:'Syne',sans-serif;font-weight:600;font-size:1.1rem;margin-bottom:.5rem;color:var(--white)}
+.pcard p{font-size:.95rem;color:var(--muted)}
+#solution{border-top:1px solid var(--border)}
+.slayout{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;max-width:1100px;margin-top:3rem}
+.flist{display:flex;flex-direction:column;gap:1.5rem}
+.fitem{display:flex;gap:1.2rem;padding:1.5rem;border:1px solid transparent;transition:border-color .2s,background .2s}
+.fitem:hover{border-color:var(--border);background:var(--card)}
+.fnum{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--teal-lt);padding-top:.2rem;flex-shrink:0;width:2rem}
+.fitem h3{font-family:'Syne',sans-serif;font-weight:600;font-size:1rem;margin-bottom:.4rem;color:var(--white)}
+.fitem p{font-size:.92rem;color:var(--muted)}
+.tvis{display:flex;flex-direction:column;gap:.6rem;margin-top:1rem}
+.trow{display:flex;justify-content:center}
+.tblk{background:var(--card);border:1px solid var(--border);padding:.9rem 2rem;text-align:center;font-family:'Syne',sans-serif;font-weight:600;font-size:.9rem;color:var(--white);transition:background .2s,border-color .2s}
+.tblk:hover{background:rgba(14,124,123,.2);border-color:var(--teal)}
+.trow:nth-child(1) .tblk{width:180px;background:rgba(14,124,123,.25);border-color:var(--teal)}
+.trow:nth-child(2) .tblk{width:265px}
+.trow:nth-child(3) .tblk{width:210px}
+.trow:nth-child(4) .tblk{width:310px}
+.tcap{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:1rem}
+.ucbox{margin-top:2.5rem;padding:1.5rem;border:1px solid var(--border);background:var(--card)}
+.ucrow{font-family:'DM Mono',monospace;font-size:.8rem;color:var(--muted);padding:.4rem 0;border-bottom:1px solid rgba(14,124,123,.15)}
+.ucrow:last-child{border-bottom:none}
+#market{background:var(--deep);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem;max-width:1100px}
+.mcard{background:var(--card);border:1px solid var(--border);padding:2.5rem 2rem;text-align:center;transition:border-color .2s}
+.mcard:hover{border-color:var(--teal)}
+.mnum{font-family:'Syne',sans-serif;font-weight:800;font-size:2.8rem;color:var(--teal-lt);line-height:1;margin-bottom:.4rem}
+.mlbl{font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+.mcard p{font-size:.9rem;color:var(--muted);line-height:1.6}
+#team{border-top:1px solid var(--border)}
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem;max-width:1100px}
+.tcard{background:var(--card);border:1px solid var(--border);padding:2rem;transition:border-color .2s,transform .2s}
+.tcard:hover{border-color:var(--teal);transform:translateY(-3px)}
+.trole{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--teal-lt);margin-bottom:.5rem}
+.tname{font-family:'Syne',sans-serif;font-weight:700;font-size:1.25rem;color:var(--white);margin-bottom:1rem}
+.tbio{font-size:.9rem;color:var(--muted);line-height:1.7}
+.tbadge{display:inline-block;margin-top:1rem;font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .75rem;border:1px solid var(--orange);color:var(--orange)}
+#pricing{background:var(--deep);border-top:1px solid var(--border)}
+.prgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem;max-width:900px}
+.prcard{background:var(--card);border:1px solid var(--border);padding:2.5rem 2rem;text-align:center;transition:border-color .2s,transform .2s;position:relative}
+.prcard:hover{border-color:var(--teal);transform:translateY(-4px)}
+.prcard.feat{border-color:var(--teal)}
+.prbadge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--teal);font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:.25rem 1rem;color:var(--white);white-space:nowrap}
+.prtier{font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+.prprice{font-family:'Syne',sans-serif;font-weight:800;font-size:2.8rem;color:var(--white);line-height:1}
+.prprice sup{font-size:1.2rem;vertical-align:super}
+.prdesc{font-size:.85rem;color:var(--muted);margin:1rem 0 1.5rem;line-height:1.6}
+.prmaint{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--teal-lt);letter-spacing:.05em;border-top:1px solid var(--border);padding-top:1rem}
+#contact{border-top:1px solid var(--border);text-align:center;padding:6rem 4rem 8rem}
+.cinner{max-width:600px;margin:0 auto}
+.cemail{display:inline-block;margin-top:2rem;font-family:'DM Mono',monospace;font-size:1rem;letter-spacing:.05em;color:var(--teal-lt);text-decoration:none;border-bottom:1px solid var(--teal);padding-bottom:2px;transition:color .2s}
+.cemail:hover{color:var(--white)}
+.caddr{margin-top:1.5rem;font-family:'DM Mono',monospace;font-size:.8rem;letter-spacing:.08em;color:var(--muted);line-height:1.9}
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2rem 4rem;display:flex;align-items:center;justify-content:space-between}
+.fbrand{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;color:var(--muted)}
+.fcopy{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.08em;color:var(--muted)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+@media(max-width:900px){nav{padding:1rem 1.5rem}.nav-links{display:none}section,#hero,#contact{padding:4rem 1.5rem}footer{padding:1.5rem;flex-direction:column;gap:.5rem;text-align:center}.pgrid,.mgrid,.tgrid,.prgrid{grid-template-columns:1fr}.slayout{grid-template-columns:1fr;gap:2rem}.hero-stats{flex-direction:column;gap:1.5rem}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#hero" class="nav-logo">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="20,2 35,10 35,30 20,38 5,30 5,10" stroke="#0e7c7b" stroke-width="1.5" fill="none"/>
+      <circle cx="20" cy="20" r="5" fill="#0e7c7b"/>
+      <circle cx="20" cy="8" r="2" fill="#13a8a7"/><circle cx="20" cy="32" r="2" fill="#13a8a7"/>
+      <circle cx="10" cy="14" r="2" fill="#13a8a7"/><circle cx="30" cy="14" r="2" fill="#13a8a7"/>
+      <circle cx="10" cy="26" r="2" fill="#13a8a7"/><circle cx="30" cy="26" r="2" fill="#13a8a7"/>
+      <line x1="20" y1="15" x2="20" y2="8" stroke="#0e7c7b" stroke-width="0.8"/>
+      <line x1="20" y1="25" x2="20" y2="32" stroke="#0e7c7b" stroke-width="0.8"/>
+      <line x1="15" y1="18" x2="10" y2="14" stroke="#0e7c7b" stroke-width="0.8"/>
+      <line x1="25" y1="18" x2="30" y2="14" stroke="#0e7c7b" stroke-width="0.8"/>
+      <line x1="15" y1="22" x2="10" y2="26" stroke="#0e7c7b" stroke-width="0.8"/>
+      <line x1="25" y1="22" x2="30" y2="26" stroke="#0e7c7b" stroke-width="0.8"/>
+    </svg>
+    <span class="nav-brand">Octet32</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#solution">Solution</a></li>
+    <li><a href="#market">Market</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Contact Us</a>
+</nav>
+
+<section id="hero">
+  <div class="hc hc1"></div><div class="hc hc2"></div>
+  <div class="eyebrow">// IP Address Lifecycle Management</div>
+  <h1 class="headline">All IP Address<br>Blocks <span class="accent">Under</span><br><span class="accent-o">Management.</span></h1>
+  <p class="hero-sub">Octet32 delivers an AI-enhanced platform that eliminates the chaos of spreadsheet-based IP management &mdash; preventing costly network failures before they happen.</p>
+  <div class="hero-actions">
+    <a href="#solution" class="btn-p">Explore the Platform</a>
+    <a href="#contact" class="btn-s">Get in Touch</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-n">$2.4B</div><div class="stat-l">Total Addressable Market</div></div>
+    <div class="stat"><div class="stat-n">15%</div><div class="stat-l">Annual Market Growth</div></div>
+    <div class="stat"><div class="stat-n">IPv4+6</div><div class="stat-l">Full Protocol Coverage</div></div>
+  </div>
+</section>
+
+<section id="problem">
+  <div class="reveal">
+    <div class="slabel">// 01 &mdash; The Problem</div>
+    <h2 class="stitle">Network complexity<br>has outpaced the tools</h2>
+    <div class="ldiv"></div>
+    <p class="sbody">Enterprises and blockchain organizations today rely on outdated tools &mdash; spreadsheets, simple databases, or legacy IPAM systems &mdash; that fail to keep pace with modern network growth and the explosive rise of IoT.</p>
+  </div>
+  <div class="pgrid reveal">
+    <div class="pcard"><div class="picon">&#9888; Downtime</div><h3>Network Outages &amp; Conflicts</h3><p>IP address conflicts and misconfigurations bring businesses to a halt. A single misconfigured network can cost hundreds of thousands in lost revenue per hour.</p></div>
+    <div class="pcard"><div class="picon">&#9888; M&amp;A Risk</div><h3>M&amp;A Integration Chaos</h3><p>When companies merge, network address spaces collide &mdash; creating immediate system-wide disruption that demands massive engineering hours or risks critical failures.</p></div>
+    <div class="pcard"><div class="picon">&#9888; IoT Scale</div><h3>Explosive Device Growth</h3><p>The proliferation of IoT devices is an incoming tsunami. Current manual tools are not scalable for smart city, industrial, and enterprise deployments of tomorrow.</p></div>
+    <div class="pcard"><div class="picon">&#9888; Visibility</div><h3>Lost Address Space</h3><p>Without a centralized system, free address space becomes invisible to engineers &mdash; creating artificial scarcity while real capacity goes unrecognized and wasted.</p></div>
+  </div>
+</section>
+
+<section id="solution">
+  <div class="reveal">
+    <div class="slabel">// 02 &mdash; The Solution</div>
+    <h2 class="stitle">One platform. Every<br>block. Total control.</h2>
+    <div class="ldiv"></div>
+  </div>
+  <div class="slayout reveal">
+    <div class="flist">
+      <div class="fitem"><div class="fnum">01</div><div><h3>Centralized Network Intelligence</h3><p>A secure, multi-user repository maintaining a complete, real-time view of all IPv4 and IPv6 address blocks, tags, metadata, and delegation across your entire organization.</p></div></div>
+      <div class="fitem"><div class="fnum">02</div><div><h3>Seamless DDI Integration</h3><p>Direct API connections to DNS, DHCP, cybersecurity tools, firewalls, IDS/IPS, and OSS platforms &mdash; eliminating manual coordination across all systems.</p></div></div>
+      <div class="fitem"><div class="fnum">03</div><div><h3>AI-Powered Automation</h3><p>NLP/ML models predict future IP address needs, identify and reclaim unused space, flag anomalies indicating security threats, and automate routine planning tasks.</p></div></div>
+      <div class="fitem"><div class="fnum">04</div><div><h3>Accuracy by Design</h3><p>Built-in conflict prevention &mdash; not just warnings &mdash; ensures network reliability. Industry best-practice templates for enterprise, blockchain, smart city, and government deployments.</p></div></div>
+    </div>
+    <div>
+      <div class="tvis">
+        <div class="trow"><div class="tblk">Control</div></div>
+        <div class="trow"><div class="tblk">Accuracy &amp; Integrity</div></div>
+        <div class="trow"><div class="tblk">Organization</div></div>
+        <div class="trow"><div class="tblk">Visibility &amp; Integration</div></div>
+      </div>
+      <div class="tcap">Application Design Tenants</div>
+      <div class="ucbox">
+        <div class="slabel" style="margin-bottom:.75rem">// Use Cases</div>
+        <div class="ucrow">&rarr; Enterprise IT &amp; Multi-site Organizations</div>
+        <div class="ucrow">&rarr; Blockchain &amp; Cryptocurrency Networks</div>
+        <div class="ucrow">&rarr; Smart Cities &amp; IoT Infrastructure</div>
+        <div class="ucrow">&rarr; Service Providers &amp; ISPs</div>
+        <div class="ucrow">&rarr; Federal, State &amp; Local Government</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="market">
+  <div class="reveal">
+    <div class="slabel">// 03 &mdash; Market Opportunity</div>
+    <h2 class="stitle">A multi-billion dollar<br>market &mdash; and growing</h2>
+    <div class="ldiv"></div>
+    <p class="sbody">The DDI (DNS, DHCP, IPAM) market exceeded $2.4 billion in 2023 and is growing at 15% annually, driven by IPv6 rollouts, IoT expansion, AI data center buildouts, and increasing network complexity.</p>
+  </div>
+  <div class="mgrid reveal">
+    <div class="mcard"><div class="mnum">$2.4B+</div><div class="mlbl">Total Addressable Market</div><p>The global DDI market as independently evaluated in 2023, with strong compound growth through 2032.</p></div>
+    <div class="mcard"><div class="mnum">15%</div><div class="mlbl">Annual Growth Rate</div><p>Sustained growth driven by IPv6 transition, IoT proliferation, M&amp;A activity, and cloud infrastructure adoption.</p></div>
+    <div class="mcard"><div class="mnum">$20M+</div><div class="mlbl">Target Customer Revenue</div><p>Mid-to-large enterprises with multi-location operations, active M&amp;A programs, or blockchain network infrastructure.</p></div>
+  </div>
+</section>
+
+<section id="team">
+  <div class="reveal">
+    <div class="slabel">// 04 &mdash; The Team</div>
+    <h2 class="stitle">Built by the people<br>who wrote the book</h2>
+    <div class="ldiv"></div>
+    <p class="sbody">Founded in 2024 by proven IPv6 and IPAM experts with decades of real-world experience at the highest levels of the industry.</p>
+  </div>
+  <div class="tgrid reveal">
+    <div class="tcard">
+      <div class="trole">Chief Executive Officer</div>
+      <div class="tname">John L. Lee</div>
+      <p class="tbio">Serial entrepreneur and founder of seven technology companies. BS-ICS from Georgia Tech. Lead inventor holding eight patents in automated IP address lifecycle management. Chair of the IPv6 Committee of the ACT-IAC Network &amp; Technology CoI, and appointed to the Federal IPv6 Task Force Executive Committee.</p>
+      <span class="tbadge">IPv6 Hall of Fame Evangelist</span>
+    </div>
+    <div class="tcard">
+      <div class="trole">Chief Operating Officer</div>
+      <div class="tname">Robert Petty</div>
+      <p class="tbio">Operations and market execution leader driving Octet32's go-to-market strategy, customer relationships, and day-to-day operations. Deep expertise in enterprise network infrastructure and IP address management markets.</p>
+    </div>
+    <div class="tcard">
+      <div class="trole">VP of Development</div>
+      <div class="tname">Mars Miro</div>
+      <p class="tbio">Product development and technical architecture lead for the Octet32 platform. Responsible for delivering the AI-enhanced IP address lifecycle management solution and guiding the engineering roadmap from prototype to commercial release.</p>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="reveal">
+    <div class="slabel">// 05 &mdash; Pricing</div>
+    <h2 class="stitle">Priced by capability,<br>not address volume</h2>
+    <div class="ldiv"></div>
+    <p class="sbody">Tiered perpetual licenses designed to grow with your organization. All tiers include 20% annual maintenance &mdash; ensuring a long-term partnership and continuous platform improvement.</p>
+  </div>
+  <div class="prgrid reveal">
+    <div class="prcard">
+      <div class="prtier">Version 1</div>
+      <div class="prprice"><sup>$</sup>7,500</div>
+      <div class="prdesc">Growing mid-market companies taking their first step beyond spreadsheet-based IP management.</div>
+      <div class="prmaint">+ $1,500 / yr maintenance</div>
+    </div>
+    <div class="prcard feat">
+      <div class="prbadge">Most Popular</div>
+      <div class="prtier">Version 2</div>
+      <div class="prprice"><sup>$</sup>15,000</div>
+      <div class="prdesc">Large enterprises requiring advanced automation, AI-powered planning, and full DDI integration.</div>
+      <div class="prmaint">+ $3,000 / yr maintenance</div>
+    </div>
+    <div class="prcard">
+      <div class="prtier">Version 3</div>
+      <div class="prprice"><sup>$</sup>25,000</div>
+      <div class="prdesc">Complex, multi-site global organizations and service providers managing enterprise-scale deployments.</div>
+      <div class="prmaint">+ $5,000 / yr maintenance</div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="cinner reveal">
+    <div class="slabel">// 06 &mdash; Contact</div>
+    <h2 class="stitle">Ready to bring every<br>block under management?</h2>
+    <div class="ldiv" style="margin:1.2rem auto 2rem"></div>
+    <p class="sbody" style="margin:0 auto;text-align:center">Whether you're an enterprise ready to modernize your IP infrastructure or an investor interested in the opportunity, we'd like to hear from you.</p>
+    <a href="mailto:robert.petty@octet32.com" class="cemail">robert.petty@octet32.com</a>
+    <div class="caddr">Octet32, LLC<br>Atlanta, GA &nbsp;&middot;&nbsp; USA</div>
+  </div>
+</section>
+
+<footer>
+  <div class="fbrand">Octet32</div>
+  <div class="fcopy">&copy; 2026 Octet32, LLC. All rights reserved. Atlanta, GA.</div>
+</footer>
+
+<script>
+const reveals=document.querySelectorAll('.reveal');
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.12});
+reveals.forEach(r=>obs.observe(r));
+</script>
+</body>
+</html>
